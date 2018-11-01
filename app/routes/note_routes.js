@@ -5,11 +5,20 @@ module.exports = function(app, db) {
     app.get('/accounts/:id', (req, res) => {
         const id = req.params.id;
         const details = {'_id': new ObjectID(id)};
+
+        let output = '';
+        output += "Account Details <br />"
+        output += "===================="
+        output += "<br /><br />"
+
         db.collection('notes').findOne(details, (err, item) => {
             if(err) {
                 res.send({'error': 'An error has occurred'});
             } else {
-                res.send(item);
+                output += `Account title: ${item.title}<br/>`;
+                output += `Account number: ${item.text}<br />`;
+                output += "<br /><br />"
+                res.send(output);
             }
         });
     });
