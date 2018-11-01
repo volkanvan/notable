@@ -17,6 +17,7 @@ module.exports = function(app, db) {
             } else {
                 output += `Account title: ${item.title}<br/>`;
                 output += `Account number: ${item.text}<br />`;
+                output += `Funds Available: ${item.funds}<br />`;
                 output += "<br /><br />"
                 res.send(output);
             }
@@ -35,6 +36,7 @@ module.exports = function(app, db) {
                     
                     output += `Account title: ${docs[i].title}<br/>`;
                     output += `Account number: ${docs[i].text}<br />`;
+                    output += `Funds Available: ${docs[i].funds}<br />`;
                     output += "<br /><br />"
                 }
                 res.send(output);
