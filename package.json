@@ -12,7 +12,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongodb": "^2.2.16"
+    "mongodb": "^2.2.16",
+    "swagger-jsdoc": "^3.2.3",
+    "swagger-ui-express": "^4.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
