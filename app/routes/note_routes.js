@@ -1,7 +1,32 @@
 let ObjectID = require('mongodb').ObjectID;
-//test
+var swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 module.exports = function(app, db) {
 
+    // swagger definition
+    var swaggerDefinition = {
+        info: {
+        title: 'Node Swagger API',
+        version: '1.0.0',
+        description: 'Demonstrating how to describe a RESTful API with Swagger',
+        },
+        host: 'localhost:8080',
+        basePath: '/',
+  };
+  
+  // options for the swagger docs
+  var options = {
+    // import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // path to the API docs
+    apis: ['./**/routes/*.js', './app/routes/notes_routes.js', 'note_routes.js'],// pass all in array 
+  
+    };
+  
+    // initialize swagger-jsdoc
+    var swaggerSpec = swaggerJSDoc(options);
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     app.get('/', (req, res) => {
         res.end(`
         <!doctype html>
@@ -67,6 +92,34 @@ module.exports = function(app, db) {
     `);
     })
     
+/**
+ * @swagger
+ * definition:
+ *   accounts:
+ *     properties:
+ *       name:
+ *         type: string
+ *       text:
+ *         type: string
+ *       funds:
+ *         type: integer
+ */
+
+    /**
+     * @swagger
+     * /accounts/id:
+     *   get:
+     *     tags:
+     *       - account
+     *     description: Returns a single account
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: A single account object
+     *         schema:
+     *           $ref: '#/definitions/account'
+     */
     app.get('/accounts/:id', (req, res) => {
         const id = req.params.id;
         const details = {'_id': new ObjectID(id)};
@@ -137,6 +190,21 @@ module.exports = function(app, db) {
         });
     });
 
+    /**
+     * @swagger
+     * /accounts:
+     *   get:
+     *     tags:
+     *       - account
+     *     description: Returns all accounts
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: All account objects
+     *         schema:
+     *           $ref: '#/definitions/account'
+     */
     app.get('/accounts', (req, res) => {
         let output = `<!doctype html></body>
         <html>
@@ -205,7 +273,21 @@ module.exports = function(app, db) {
         });
     });
 
-    
+    /**
+     * @swagger
+     * /accounts:
+     *   post:
+     *     tags:
+     *       - account
+     *     description: Creates a new account
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: Newly created account object
+     *         schema:
+     *           $ref: '#/definitions/account'
+     */
     app.post('/accounts', (req, res) => {
         let output = `<!doctype html></body>
         <html>
@@ -272,6 +354,21 @@ module.exports = function(app, db) {
         });
     });
 
+    /**
+     * @swagger
+     * /accounts/id:
+     *   delete:
+     *     tags:
+     *       - account
+     *     description: Deletes an account
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: String response indicating deletion success
+     *         schema:
+     *           $ref: '#/definitions/account'
+     */
     app.delete('/accounts/:id', (req, res) => {
         const id = req.params.id;
         const details = {'_id': new ObjectID(id)};
@@ -284,6 +381,21 @@ module.exports = function(app, db) {
         });
     });
 
+    /**
+     * @swagger
+     * /accounts/id:
+     *   put:
+     *     tags:
+     *       - account
+     *     description: Updates an exisiting account
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: A single account object
+     *         schema:
+     *           $ref: '#/definitions/account'
+     */
     app.put('/accounts/:id', (req, res) => {
         const id = req.params.id;
         const details = {'_id': new ObjectID(id)};
@@ -294,6 +406,12 @@ module.exports = function(app, db) {
             } else {
                 res.send(note);
             }
-        })
-    })
+        });
+    });
+
+    // serve swagger 
+    app.get('/swagger.json', function(req, res) {   
+        res.setHeader('Content-Type', 'application/json');   
+        res.send(swaggerSpec); 
+    });
 };
