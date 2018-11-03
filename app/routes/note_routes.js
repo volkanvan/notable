@@ -11,8 +11,8 @@ module.exports = function(app, db) {
 			version: '1.0.0',
 			description: 'Demonstrating how to describe a RESTful API with Swagger',
         },
-//        host: 'notabledemo.azurewebsites.net',
-		host: 'localhost:8080',
+        host: 'notabledemo.azurewebsites.net',
+//		host: 'localhost:8080',
         basePath: '/',
   };
   
